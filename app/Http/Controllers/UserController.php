@@ -18,13 +18,13 @@ class UserController extends Controller
         try {
             $users = User::all();
             return response()->json([
-                'status' => true,
+                'success' => true,
                 'message' => $users
             ], 200);
 
         } catch (Throwable $th) {
             return response()->json([
-                'status' => false,
+                'success' => false,
                 'message' => "Users has been false."
             ], 500);
         }
@@ -38,13 +38,13 @@ class UserController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'age' => 'required|numeric|min:1|decimal:0',
+            'age' => 'required|integer|min:1|decimal:0',
             'name' => 'required|string',
             'email' => 'required|unique:users|email',
         ]);
         try {
             $data = User::create([
-                'age' =>(int)$request->input('age'),
+                'age' => (int)$request->input('age'),
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
             ]);
@@ -72,7 +72,7 @@ class UserController extends Controller
             $user = User::findOrFail($id);
 
             return response()->json([
-                'status' => true,
+                'success' => true,
                 'message' => $user
             ], 200);
         } catch (Throwable $th) {
@@ -80,7 +80,7 @@ class UserController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => "User has been show false."
-            ], 500);
+            ], 404);
         }
     }
 
@@ -94,7 +94,7 @@ class UserController extends Controller
     public function update(Request $request, $id): JsonResponse
     {
         $validated = $request->validate([
-            'age' => 'required|numeric|min:1|decimal:0',
+            'age' => 'required|integer|min:1|decimal:0',
             'name' => 'required|string',
             'email' => 'required|unique:users|email',
         ]);
@@ -113,7 +113,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => "User updated false!"
-            ], 500);
+            ], 404);
         }
 
     }
@@ -135,14 +135,14 @@ class UserController extends Controller
             $user->delete();
 
             return response()->json([
-                'status' => true,
+                'success' => true,
                 'message' => "User deleted successfully!",
             ], 200);
         } catch (Throwable $th) {
             return response()->json([
-                'status' => false,
+                'success' => false,
                 'message' => "User deleted false!",
-            ], 500);
+            ], 404);
         }
 
     }
