@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -35,13 +36,8 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(UserRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'age' => 'required|integer|min:1|decimal:0',
-            'name' => 'required|string',
-            'email' => 'required|unique:users|email',
-        ]);
         try {
             $data = User::create([
                 'age' => (int)$request->input('age'),
@@ -66,7 +62,7 @@ class UserController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function show($id): JsonResponse
+    public function show(int $id): JsonResponse
     {
         try {
             $user = User::findOrFail($id);
@@ -91,13 +87,8 @@ class UserController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(UserRequest $request, int $id): JsonResponse
     {
-        $validated = $request->validate([
-            'age' => 'required|integer|min:1|decimal:0',
-            'name' => 'required|string',
-            'email' => 'required|unique:users|email',
-        ]);
         try {
             $user = User::findOrFail($id);
             $user->update([
@@ -127,7 +118,7 @@ class UserController extends Controller
      * @return JsonResponse
      */
 
-    public function destroy(Request $request, $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
         try {
